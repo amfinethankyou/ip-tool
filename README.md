@@ -29,6 +29,8 @@
 | 🛡️ **Proxy / VPN / Hosting Flags** | Instantly know if an IP belongs to a VPN, proxy, or data-centre |
 | 📡 **Reverse DNS** | PTR record lookup for every IP |
 | ✅ **Input Validation** | Invalid IPs are skipped gracefully with a clear error |
+| 📂 **Input File Support** | Read IPs from a file via `--input-file` |
+| 🔁 **Retry + Timeout Controls** | Tune network behavior with `--retries` and `--timeout` |
 | ⏱️ **Timeout Handling** | Never hangs — all requests have a configurable timeout |
 
 ---
@@ -38,7 +40,8 @@
 ### Prerequisites
 
 ```bash
-sudo apt-get install python3 python3-pip   # Debian / Ubuntu
+python --version   # Python 3.8+
+pip --version
 ```
 
 ### Install dependencies
@@ -58,7 +61,7 @@ chmod +x ip_info_extractor.py
 ## 📖 Usage
 
 ```
-usage: ip_info_extractor.py [-h] [--format {table,json,csv}] [--output FILE] [--no-color] [IP ...]
+usage: ip_info_extractor.py [-h] [--input-file FILE] [--format {table,json,csv}] [--output FILE] [--timeout TIMEOUT] [--retries RETRIES] [--no-color] [IP ...]
 
 🌐 IP Info Extractor – Powerful IP intelligence at your fingertips
 
@@ -67,9 +70,12 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
+  --input-file/-i FILE  Read IP address(es) from FILE (one per line or comma-separated)
   --format/-f {table,json,csv}
                         Output format (default: table)
   --output, -o FILE     Save output to FILE instead of printing to stdout
+  --timeout TIMEOUT     Request timeout in seconds (default: 10.0)
+  --retries RETRIES     Request retries on failure (default: 2)
   --no-color            Disable coloured output
 ```
 
@@ -120,6 +126,14 @@ python3 ip_info_extractor.py 8.8.8.8
 python3 ip_info_extractor.py 8.8.8.8 1.1.1.1 9.9.9.9
 ```
 
+### Load IPs from a file
+
+```bash
+python3 ip_info_extractor.py --input-file ips.txt
+```
+
+`ips.txt` can contain one IP per line or comma-separated values.
+
 ### JSON output
 
 ```bash
@@ -164,6 +178,12 @@ python3 ip_info_extractor.py 8.8.8.8 1.1.1.1 --format csv  --output results.csv
 
 ```bash
 python3 ip_info_extractor.py 8.8.8.8 --format json --no-color | jq .
+```
+
+### Tune request reliability
+
+```bash
+python3 ip_info_extractor.py 8.8.8.8 --timeout 5 --retries 3
 ```
 
 ---

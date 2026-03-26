@@ -1,1 +1,0 @@
-./ip_info_extractor.py <IP_ADDRESS>
